@@ -1,0 +1,1010 @@
+$date
+	Tue Jan 27 14:18:09 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_cpu_top $end
+$var wire 1 ! imem_resp_ready $end
+$var wire 1 " imem_req_valid $end
+$var wire 32 # imem_req_addr [31:0] $end
+$var reg 1 $ clk $end
+$var reg 1 % imem_req_ready $end
+$var reg 32 & imem_resp_data [31:0] $end
+$var reg 1 ' imem_resp_valid $end
+$var reg 1 ( pending $end
+$var reg 32 ) pending_addr [31:0] $end
+$var reg 1 * reset_n $end
+$var integer 32 + i [31:0] $end
+$scope module dut $end
+$var wire 1 $ clk $end
+$var wire 1 , consume $end
+$var wire 1 - dec_wb_we $end
+$var wire 1 . imem_req_fire $end
+$var wire 1 % imem_req_ready $end
+$var wire 32 / imem_resp_data [31:0] $end
+$var wire 1 0 imem_resp_fire $end
+$var wire 1 ! imem_resp_ready $end
+$var wire 1 ' imem_resp_valid $end
+$var wire 1 1 op_add $end
+$var wire 1 2 op_addi $end
+$var wire 1 3 op_and $end
+$var wire 1 4 op_or $end
+$var wire 1 5 op_sub $end
+$var wire 1 6 pc_en $end
+$var wire 1 * reset_n $end
+$var wire 32 7 wb_data [31:0] $end
+$var wire 5 8 wb_rd [4:0] $end
+$var wire 1 9 wb_we $end
+$var wire 5 : shamt [4:0] $end
+$var wire 32 ; rs2_data [31:0] $end
+$var wire 5 < rs2 [4:0] $end
+$var wire 32 = rs1_data [31:0] $end
+$var wire 5 > rs1 [4:0] $end
+$var wire 5 ? rd [4:0] $end
+$var wire 32 @ pc_next [31:0] $end
+$var wire 32 A pc_current [31:0] $end
+$var wire 7 B opcode [6:0] $end
+$var wire 1 C is_rtype $end
+$var wire 1 D is_itype $end
+$var wire 32 E imm_i [31:0] $end
+$var wire 1 " imem_req_valid $end
+$var wire 32 F imem_req_addr [31:0] $end
+$var wire 7 G funct7 [6:0] $end
+$var wire 3 H funct3 [2:0] $end
+$var wire 1 I alu_zero $end
+$var wire 32 J alu_res [31:0] $end
+$var wire 4 K alu_opcode [3:0] $end
+$var wire 32 L alu_in2 [31:0] $end
+$var reg 32 M if_id_inst [31:0] $end
+$var reg 1 N if_id_valid $end
+$scope module u_alu $end
+$var wire 32 O b [31:0] $end
+$var wire 4 P opcode [3:0] $end
+$var wire 1 I zero $end
+$var wire 32 Q a [31:0] $end
+$var reg 32 R result [31:0] $end
+$upscope $end
+$scope module u_dec $end
+$var wire 32 S instruction [31:0] $end
+$var wire 5 T shamt [4:0] $end
+$var wire 5 U rs2 [4:0] $end
+$var wire 5 V rs1 [4:0] $end
+$var wire 5 W rd [4:0] $end
+$var wire 7 X opcode [6:0] $end
+$var wire 32 Y imm_i [31:0] $end
+$var wire 7 Z funct7 [6:0] $end
+$var wire 3 [ funct3 [2:0] $end
+$upscope $end
+$scope module u_fetch $end
+$var wire 1 $ clk $end
+$var wire 32 \ imem_req_addr [31:0] $end
+$var wire 1 ] imem_req_fire $end
+$var wire 1 % imem_req_ready $end
+$var wire 1 " imem_req_valid $end
+$var wire 32 ^ imem_resp_data [31:0] $end
+$var wire 1 _ imem_resp_fire $end
+$var wire 1 ! imem_resp_ready $end
+$var wire 1 ' imem_resp_valid $end
+$var wire 1 * reset_n $end
+$var wire 32 ` pc_current [31:0] $end
+$var reg 1 a imem_outstanding $end
+$upscope $end
+$scope module u_pc $end
+$var wire 1 $ clk $end
+$var wire 1 6 pc_en $end
+$var wire 32 b pc_next [31:0] $end
+$var wire 1 * reset_n $end
+$var reg 32 c pc_current [31:0] $end
+$upscope $end
+$scope module u_rf $end
+$var wire 1 $ clk $end
+$var wire 5 d raddr1 [4:0] $end
+$var wire 5 e raddr2 [4:0] $end
+$var wire 5 f waddr [4:0] $end
+$var wire 32 g wdata [31:0] $end
+$var wire 1 9 we $end
+$var wire 32 h rdata2 [31:0] $end
+$var wire 32 i rdata1 [31:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx i
+bx h
+b0 g
+bx f
+bx e
+bx d
+bx c
+bx b
+xa
+bx `
+0_
+b0 ^
+x]
+bx \
+bx [
+bx Z
+bx Y
+bx X
+bx W
+bx V
+bx U
+bx T
+bx S
+b0 R
+bx Q
+b0xx P
+bx O
+xN
+bx M
+bx L
+b0xx K
+b0 J
+1I
+bx H
+bx G
+bx F
+bx E
+xD
+xC
+bx B
+bx A
+bx @
+bx ?
+bx >
+bx =
+bx <
+bx ;
+bx :
+x9
+bx 8
+b0 7
+06
+x5
+x4
+x3
+x2
+x1
+00
+b0 /
+x.
+x-
+x,
+b100000000 +
+0*
+bx )
+x(
+0'
+b0 &
+1%
+0$
+bx #
+x"
+1!
+$end
+#5000
+b0 K
+b0 P
+0-
+04
+03
+01
+b0 L
+b0 O
+1]
+1.
+02
+b0 =
+b0 Q
+b0 i
+b0 ;
+b0 h
+05
+1"
+0D
+0C
+b0 B
+b0 X
+b0 8
+b0 f
+b0 ?
+b0 W
+b0 H
+b0 [
+b0 >
+b0 V
+b0 d
+b0 <
+b0 U
+b0 e
+b0 G
+b0 Z
+b0 E
+b0 Y
+b0 :
+b0 T
+09
+b0 #
+b0 F
+b0 \
+b100 @
+b100 b
+b0 A
+b0 `
+b0 c
+0a
+b0 M
+b0 S
+0,
+0N
+b0 )
+0(
+1$
+#10000
+0$
+#15000
+1$
+#20000
+0$
+#25000
+1$
+#30000
+0$
+#31000
+1*
+#35000
+0]
+0.
+0"
+1(
+1a
+1$
+#40000
+0$
+#45000
+16
+10
+1_
+0(
+b10011 &
+b10011 /
+b10011 ^
+1'
+1$
+#50000
+0$
+#55000
+19
+1-
+12
+1]
+1.
+06
+00
+0_
+1D
+b10011 B
+b10011 X
+1"
+0'
+1,
+1N
+b10011 M
+b10011 S
+0a
+b100 #
+b100 F
+b100 \
+b1000 @
+b1000 b
+b100 A
+b100 `
+b100 c
+1$
+#60000
+0$
+#65000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b100 )
+1(
+1$
+#70000
+0$
+#75000
+16
+10
+1_
+0(
+1'
+1$
+#80000
+0$
+#85000
+1]
+1.
+1"
+19
+06
+00
+0_
+b1000 #
+b1000 F
+b1000 \
+b1100 @
+b1100 b
+b1000 A
+b1000 `
+b1000 c
+0a
+1,
+1N
+0'
+1$
+#90000
+0$
+#95000
+0]
+0.
+09
+0"
+b1000 )
+1(
+0,
+0N
+1a
+1$
+#100000
+0$
+#105000
+16
+10
+1_
+0(
+1'
+1$
+#110000
+0$
+#115000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b1100 #
+b1100 F
+b1100 \
+b10000 @
+b10000 b
+b1100 A
+b1100 `
+b1100 c
+1$
+#120000
+0$
+#125000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b1100 )
+1(
+1$
+#130000
+0$
+#135000
+16
+10
+1_
+0(
+1'
+1$
+#140000
+0$
+#145000
+1]
+1.
+1"
+19
+06
+00
+0_
+b10000 #
+b10000 F
+b10000 \
+b10100 @
+b10100 b
+b10000 A
+b10000 `
+b10000 c
+0a
+1,
+1N
+0'
+1$
+#150000
+0$
+#155000
+0]
+0.
+09
+0"
+b10000 )
+1(
+0,
+0N
+1a
+1$
+#160000
+0$
+#165000
+16
+10
+1_
+0(
+1'
+1$
+#170000
+0$
+#175000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b10100 #
+b10100 F
+b10100 \
+b11000 @
+b11000 b
+b10100 A
+b10100 `
+b10100 c
+1$
+#180000
+0$
+#185000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b10100 )
+1(
+1$
+#190000
+0$
+#195000
+16
+10
+1_
+0(
+1'
+1$
+#200000
+0$
+#205000
+1]
+1.
+1"
+19
+06
+00
+0_
+b11000 #
+b11000 F
+b11000 \
+b11100 @
+b11100 b
+b11000 A
+b11000 `
+b11000 c
+0a
+1,
+1N
+0'
+1$
+#210000
+0$
+#215000
+0]
+0.
+09
+0"
+b11000 )
+1(
+0,
+0N
+1a
+1$
+#220000
+0$
+#225000
+16
+10
+1_
+0(
+1'
+1$
+#230000
+0$
+#235000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b11100 #
+b11100 F
+b11100 \
+b100000 @
+b100000 b
+b11100 A
+b11100 `
+b11100 c
+1$
+#240000
+0$
+#245000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b11100 )
+1(
+1$
+#250000
+0$
+#255000
+16
+10
+1_
+0(
+1'
+1$
+#260000
+0$
+#265000
+1]
+1.
+1"
+19
+06
+00
+0_
+b100000 #
+b100000 F
+b100000 \
+b100100 @
+b100100 b
+b100000 A
+b100000 `
+b100000 c
+0a
+1,
+1N
+0'
+1$
+#270000
+0$
+#275000
+0]
+0.
+09
+0"
+b100000 )
+1(
+0,
+0N
+1a
+1$
+#280000
+0$
+#285000
+16
+10
+1_
+0(
+1'
+1$
+#290000
+0$
+#295000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b100100 #
+b100100 F
+b100100 \
+b101000 @
+b101000 b
+b100100 A
+b100100 `
+b100100 c
+1$
+#300000
+0$
+#305000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b100100 )
+1(
+1$
+#310000
+0$
+#315000
+16
+10
+1_
+0(
+1'
+1$
+#320000
+0$
+#325000
+1]
+1.
+1"
+19
+06
+00
+0_
+b101000 #
+b101000 F
+b101000 \
+b101100 @
+b101100 b
+b101000 A
+b101000 `
+b101000 c
+0a
+1,
+1N
+0'
+1$
+#330000
+0$
+#335000
+0]
+0.
+09
+0"
+b101000 )
+1(
+0,
+0N
+1a
+1$
+#340000
+0$
+#345000
+16
+10
+1_
+0(
+1'
+1$
+#350000
+0$
+#355000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b101100 #
+b101100 F
+b101100 \
+b110000 @
+b110000 b
+b101100 A
+b101100 `
+b101100 c
+1$
+#360000
+0$
+#365000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b101100 )
+1(
+1$
+#370000
+0$
+#375000
+16
+10
+1_
+0(
+1'
+1$
+#380000
+0$
+#385000
+1]
+1.
+1"
+19
+06
+00
+0_
+b110000 #
+b110000 F
+b110000 \
+b110100 @
+b110100 b
+b110000 A
+b110000 `
+b110000 c
+0a
+1,
+1N
+0'
+1$
+#390000
+0$
+#395000
+0]
+0.
+09
+0"
+b110000 )
+1(
+0,
+0N
+1a
+1$
+#400000
+0$
+#405000
+16
+10
+1_
+0(
+1'
+1$
+#410000
+0$
+#415000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b110100 #
+b110100 F
+b110100 \
+b111000 @
+b111000 b
+b110100 A
+b110100 `
+b110100 c
+1$
+#420000
+0$
+#425000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b110100 )
+1(
+1$
+#430000
+0$
+#435000
+16
+10
+1_
+0(
+1'
+1$
+#440000
+0$
+#445000
+1]
+1.
+1"
+19
+06
+00
+0_
+b111000 #
+b111000 F
+b111000 \
+b111100 @
+b111100 b
+b111000 A
+b111000 `
+b111000 c
+0a
+1,
+1N
+0'
+1$
+#450000
+0$
+#455000
+0]
+0.
+09
+0"
+b111000 )
+1(
+0,
+0N
+1a
+1$
+#460000
+0$
+#465000
+16
+10
+1_
+0(
+1'
+1$
+#470000
+0$
+#475000
+1]
+1.
+06
+00
+0_
+19
+1"
+0'
+1,
+1N
+0a
+b111100 #
+b111100 F
+b111100 \
+b1000000 @
+b1000000 b
+b111100 A
+b111100 `
+b111100 c
+1$
+#480000
+0$
+#485000
+0]
+0.
+0"
+09
+1a
+0,
+0N
+b111100 )
+1(
+1$
+#490000
+0$
+#495000
+16
+10
+1_
+0(
+1'
+1$
+#500000
+0$
+#505000
+1]
+1.
+1"
+19
+06
+00
+0_
+b1000000 #
+b1000000 F
+b1000000 \
+b1000100 @
+b1000100 b
+b1000000 A
+b1000000 `
+b1000000 c
+0a
+1,
+1N
+0'
+1$
+#510000
+0$
+#515000
+0]
+0.
+09
+0"
+b1000000 )
+1(
+0,
+0N
+1a
+1$
+#520000
+0$
+#525000
+16
+10
+1_
+0(
+1'
+1$
+#530000
+0$
+#531000
