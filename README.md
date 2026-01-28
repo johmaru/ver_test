@@ -14,13 +14,27 @@ Fetch/Decode・Execute/WBの3ステージ。
 
 ```bash
 iverilog -g2012 -o sim.out `
-  .\top.v `
-  .\rtl\alu.v `
-  .\rtl\stages\fetch.v `
-  .\rtl\stages\dec.v `
-  .\tb_cpu_top.v
+  .\top.sv `
+  .\rtl\alu.sv `
+  .\rtl\stages\fetch.sv `
+  .\rtl\stages\dec.sv `
+  .\tb_cpu_top.sv
 ```
 
 ```bash
 vvp .\sim.out
 ```
+
+GtkWave
+```bash
+gtkwave .\cpu.vcd
+```
+
+## ロードマップ
+
+1. 3ステージ化する
+2. RV32Iの命令を揃える(分岐、ジャンプ、即値生成、比較、ハザード)
+3. 例外追加(軽いやつ)
+4. Load/Store + バイトイネーブル + RAM + MMIOデコード
+5. キャッシュ追加
+6. 割り込み、タイマー、DMA

@@ -2,11 +2,11 @@ module alu (
     input [31:0] a,
     input [31:0] b,
     input [3:0] opcode,
-    output reg [31:0] result,
-    output reg zero
+    output logic [31:0] result,
+    output logic zero
 );
 
-always@(*) begin
+always_comb begin
     case (opcode)
     4'b0000: result = a + b;          // ADD
     4'b0001: result = a - b;          // SUB

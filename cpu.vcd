@@ -1,5 +1,5 @@
 $date
-	Tue Jan 27 14:18:09 2026
+	Wed Jan 28 15:06:25 2026
 $end
 $version
 	Icarus Verilog
@@ -11,1000 +11,1445 @@ $scope module tb_cpu_top $end
 $var wire 1 ! imem_resp_ready $end
 $var wire 1 " imem_req_valid $end
 $var wire 32 # imem_req_addr [31:0] $end
-$var reg 1 $ clk $end
-$var reg 1 % imem_req_ready $end
-$var reg 32 & imem_resp_data [31:0] $end
-$var reg 1 ' imem_resp_valid $end
-$var reg 1 ( pending $end
-$var reg 32 ) pending_addr [31:0] $end
-$var reg 1 * reset_n $end
-$var integer 32 + i [31:0] $end
+$var wire 32 $ dbg_x3 [31:0] $end
+$var wire 32 % dbg_x2 [31:0] $end
+$var wire 32 & dbg_x1 [31:0] $end
+$var reg 1 ' clk $end
+$var reg 1 ( imem_req_ready $end
+$var reg 32 ) imem_resp_data [31:0] $end
+$var reg 1 * imem_resp_valid $end
+$var reg 1 + pending $end
+$var reg 32 , pending_addr [31:0] $end
+$var reg 1 - reset_n $end
+$var integer 32 . i [31:0] $end
 $scope module dut $end
-$var wire 1 $ clk $end
-$var wire 1 , consume $end
-$var wire 1 - dec_wb_we $end
-$var wire 1 . imem_req_fire $end
-$var wire 1 % imem_req_ready $end
-$var wire 32 / imem_resp_data [31:0] $end
-$var wire 1 0 imem_resp_fire $end
+$var wire 1 ' clk $end
+$var wire 1 / consume $end
+$var wire 32 0 dbg_x1 [31:0] $end
+$var wire 32 1 dbg_x2 [31:0] $end
+$var wire 32 2 dbg_x3 [31:0] $end
+$var wire 1 3 dec_wb_we $end
+$var wire 1 4 imem_req_fire $end
+$var wire 1 ( imem_req_ready $end
+$var wire 32 5 imem_resp_data [31:0] $end
+$var wire 1 6 imem_resp_fire $end
 $var wire 1 ! imem_resp_ready $end
-$var wire 1 ' imem_resp_valid $end
-$var wire 1 1 op_add $end
-$var wire 1 2 op_addi $end
-$var wire 1 3 op_and $end
-$var wire 1 4 op_or $end
-$var wire 1 5 op_sub $end
-$var wire 1 6 pc_en $end
-$var wire 1 * reset_n $end
-$var wire 32 7 wb_data [31:0] $end
-$var wire 5 8 wb_rd [4:0] $end
-$var wire 1 9 wb_we $end
-$var wire 5 : shamt [4:0] $end
-$var wire 32 ; rs2_data [31:0] $end
-$var wire 5 < rs2 [4:0] $end
-$var wire 32 = rs1_data [31:0] $end
-$var wire 5 > rs1 [4:0] $end
-$var wire 5 ? rd [4:0] $end
-$var wire 32 @ pc_next [31:0] $end
-$var wire 32 A pc_current [31:0] $end
-$var wire 7 B opcode [6:0] $end
-$var wire 1 C is_rtype $end
-$var wire 1 D is_itype $end
-$var wire 32 E imm_i [31:0] $end
+$var wire 1 * imem_resp_valid $end
+$var wire 1 7 op_add $end
+$var wire 1 8 op_addi $end
+$var wire 1 9 op_and $end
+$var wire 1 : op_or $end
+$var wire 1 ; op_sub $end
+$var wire 1 < pc_en $end
+$var wire 1 - reset_n $end
+$var wire 32 = wb_data [31:0] $end
+$var wire 5 > wb_rd [4:0] $end
+$var wire 1 ? wb_we $end
+$var wire 5 @ shamt [4:0] $end
+$var wire 32 A rs2_data [31:0] $end
+$var wire 5 B rs2 [4:0] $end
+$var wire 32 C rs1_data [31:0] $end
+$var wire 5 D rs1 [4:0] $end
+$var wire 5 E rd [4:0] $end
+$var wire 32 F pc_next [31:0] $end
+$var wire 32 G pc_current [31:0] $end
+$var wire 7 H opcode [6:0] $end
+$var wire 1 I is_rtype $end
+$var wire 1 J is_itype $end
+$var wire 32 K imm_i [31:0] $end
 $var wire 1 " imem_req_valid $end
-$var wire 32 F imem_req_addr [31:0] $end
-$var wire 7 G funct7 [6:0] $end
-$var wire 3 H funct3 [2:0] $end
-$var wire 1 I alu_zero $end
-$var wire 32 J alu_res [31:0] $end
-$var wire 4 K alu_opcode [3:0] $end
-$var wire 32 L alu_in2 [31:0] $end
-$var reg 32 M if_id_inst [31:0] $end
-$var reg 1 N if_id_valid $end
+$var wire 32 L imem_req_addr [31:0] $end
+$var wire 7 M funct7 [6:0] $end
+$var wire 3 N funct3 [2:0] $end
+$var wire 1 O alu_zero $end
+$var wire 32 P alu_res [31:0] $end
+$var wire 4 Q alu_opcode [3:0] $end
+$var wire 32 R alu_in2 [31:0] $end
+$var reg 32 S if_id_inst [31:0] $end
+$var reg 1 T if_id_valid $end
 $scope module u_alu $end
-$var wire 32 O b [31:0] $end
-$var wire 4 P opcode [3:0] $end
-$var wire 1 I zero $end
-$var wire 32 Q a [31:0] $end
-$var reg 32 R result [31:0] $end
+$var wire 32 U b [31:0] $end
+$var wire 4 V opcode [3:0] $end
+$var wire 1 O zero $end
+$var wire 32 W a [31:0] $end
+$var reg 32 X result [31:0] $end
 $upscope $end
 $scope module u_dec $end
-$var wire 32 S instruction [31:0] $end
-$var wire 5 T shamt [4:0] $end
-$var wire 5 U rs2 [4:0] $end
-$var wire 5 V rs1 [4:0] $end
-$var wire 5 W rd [4:0] $end
-$var wire 7 X opcode [6:0] $end
-$var wire 32 Y imm_i [31:0] $end
-$var wire 7 Z funct7 [6:0] $end
-$var wire 3 [ funct3 [2:0] $end
+$var wire 32 Y instruction [31:0] $end
+$var wire 5 Z shamt [4:0] $end
+$var wire 5 [ rs2 [4:0] $end
+$var wire 5 \ rs1 [4:0] $end
+$var wire 5 ] rd [4:0] $end
+$var wire 7 ^ opcode [6:0] $end
+$var wire 32 _ imm_i [31:0] $end
+$var wire 7 ` funct7 [6:0] $end
+$var wire 3 a funct3 [2:0] $end
 $upscope $end
 $scope module u_fetch $end
-$var wire 1 $ clk $end
-$var wire 32 \ imem_req_addr [31:0] $end
-$var wire 1 ] imem_req_fire $end
-$var wire 1 % imem_req_ready $end
+$var wire 1 ' clk $end
+$var wire 32 b imem_req_addr [31:0] $end
+$var wire 1 c imem_req_fire $end
+$var wire 1 ( imem_req_ready $end
 $var wire 1 " imem_req_valid $end
-$var wire 32 ^ imem_resp_data [31:0] $end
-$var wire 1 _ imem_resp_fire $end
+$var wire 32 d imem_resp_data [31:0] $end
+$var wire 1 e imem_resp_fire $end
 $var wire 1 ! imem_resp_ready $end
-$var wire 1 ' imem_resp_valid $end
-$var wire 1 * reset_n $end
-$var wire 32 ` pc_current [31:0] $end
-$var reg 1 a imem_outstanding $end
+$var wire 1 * imem_resp_valid $end
+$var wire 1 - reset_n $end
+$var wire 32 f pc_current [31:0] $end
+$var reg 1 g imem_outstanding $end
 $upscope $end
 $scope module u_pc $end
-$var wire 1 $ clk $end
-$var wire 1 6 pc_en $end
-$var wire 32 b pc_next [31:0] $end
-$var wire 1 * reset_n $end
-$var reg 32 c pc_current [31:0] $end
+$var wire 1 ' clk $end
+$var wire 1 < pc_en $end
+$var wire 32 h pc_next [31:0] $end
+$var wire 1 - reset_n $end
+$var reg 32 i pc_current [31:0] $end
 $upscope $end
 $scope module u_rf $end
-$var wire 1 $ clk $end
-$var wire 5 d raddr1 [4:0] $end
-$var wire 5 e raddr2 [4:0] $end
-$var wire 5 f waddr [4:0] $end
-$var wire 32 g wdata [31:0] $end
-$var wire 1 9 we $end
-$var wire 32 h rdata2 [31:0] $end
-$var wire 32 i rdata1 [31:0] $end
+$var wire 1 ' clk $end
+$var wire 5 j raddr1 [4:0] $end
+$var wire 5 k raddr2 [4:0] $end
+$var wire 5 l waddr [4:0] $end
+$var wire 32 m wdata [31:0] $end
+$var wire 1 ? we $end
+$var reg 32 n rdata1 [31:0] $end
+$var reg 32 o rdata2 [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
+bx o
+bx n
+b0 m
+bx l
+bx k
+bx j
 bx i
 bx h
-b0 g
+xg
 bx f
-bx e
-bx d
-bx c
+0e
+b0 d
+xc
 bx b
-xa
+bx a
 bx `
-0_
-b0 ^
-x]
+bx _
+bx ^
+bx ]
 bx \
 bx [
 bx Z
 bx Y
-bx X
+b0 X
 bx W
-bx V
+b0xx V
 bx U
-bx T
+xT
 bx S
-b0 R
-bx Q
-b0xx P
-bx O
-xN
+bx R
+b0xx Q
+b0 P
+1O
+bx N
 bx M
 bx L
-b0xx K
-b0 J
-1I
+bx K
+xJ
+xI
 bx H
 bx G
 bx F
 bx E
-xD
-xC
+bx D
+bx C
 bx B
 bx A
 bx @
-bx ?
+x?
 bx >
-bx =
-bx <
-bx ;
-bx :
+b0 =
+0<
+x;
+x:
 x9
-bx 8
-b0 7
+x8
+x7
 06
-x5
+b0 5
 x4
 x3
-x2
-x1
-00
-b0 /
-x.
-x-
-x,
-b100000000 +
+bx 2
+bx 1
+bx 0
+x/
+b100000000 .
+0-
+bx ,
+x+
 0*
-bx )
-x(
+b0 )
+1(
 0'
-b0 &
-1%
-0$
+bx &
+bx %
+bx $
 bx #
 x"
 1!
 $end
 #5000
-b0 K
-b0 P
-0-
-04
-03
-01
-b0 L
-b0 O
-1]
-1.
-02
-b0 =
 b0 Q
-b0 i
-b0 ;
-b0 h
-05
-1"
-0D
-0C
-b0 B
-b0 X
-b0 8
-b0 f
-b0 ?
-b0 W
-b0 H
-b0 [
-b0 >
 b0 V
-b0 d
-b0 <
+03
+0:
+09
+07
+b0 R
 b0 U
-b0 e
-b0 G
-b0 Z
-b0 E
-b0 Y
-b0 :
-b0 T
-09
-b0 #
-b0 F
-b0 \
-b100 @
-b100 b
+1c
+14
+08
 b0 A
-b0 `
-b0 c
-0a
+b0 o
+b0 C
+b0 W
+b0 n
+0;
+1"
+0J
+0I
+b0 H
+b0 ^
+b0 >
+b0 l
+b0 E
+b0 ]
+b0 N
+b0 a
+b0 D
+b0 \
+b0 j
+b0 B
+b0 [
+b0 k
 b0 M
-b0 S
-0,
-0N
-b0 )
-0(
-1$
-#10000
-0$
-#15000
-1$
-#20000
-0$
-#25000
-1$
-#30000
-0$
-#31000
-1*
-#35000
-0]
-0.
-0"
-1(
-1a
-1$
-#40000
-0$
-#45000
-16
-10
-1_
-0(
-b10011 &
-b10011 /
-b10011 ^
-1'
-1$
-#50000
-0$
-#55000
-19
-1-
-12
-1]
-1.
-06
-00
-0_
-1D
-b10011 B
-b10011 X
-1"
-0'
-1,
-1N
-b10011 M
-b10011 S
-0a
-b100 #
+b0 `
+b0 K
+b0 _
+b0 @
+b0 Z
+0?
+b0 #
+b0 L
+b0 b
 b100 F
-b100 \
-b1000 @
-b1000 b
-b100 A
-b100 `
-b100 c
-1$
-#60000
-0$
-#65000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b100 )
-1(
-1$
-#70000
-0$
-#75000
-16
-10
-1_
-0(
+b100 h
+b0 G
+b0 f
+b0 i
+0g
+b0 S
+b0 Y
+0/
+0T
+b0 ,
+0+
 1'
-1$
-#80000
-0$
-#85000
-1]
-1.
-1"
-19
+#10000
+0'
+#15000
+1'
+#20000
+0'
+#25000
+1'
+#30000
+0'
+#31000
+1-
+b0 $
+b0 2
+b0 %
+b0 1
+b0 &
+b0 0
+b100000 .
+#35000
+0c
+04
+0"
+1+
+1g
+1'
+#40000
+0'
+#45000
+1<
+16
+1e
+0+
+b10100000000000010010011 )
+b10100000000000010010011 5
+b10100000000000010010011 d
+1*
+1'
+#50000
+0'
+#55000
+1?
+0O
+b101 =
+b101 m
+b101 P
+b101 X
+13
+b101 R
+b101 U
+18
+1c
+14
+0<
 06
-00
-0_
-b1000 #
+0e
+1J
+b10011 H
+b10011 ^
+b1 >
+b1 l
+b1 E
+b1 ]
+b101 B
+b101 [
+b101 k
+b101 K
+b101 _
+b101 @
+b101 Z
+1"
+0*
+1/
+1T
+b10100000000000010010011 S
+b10100000000000010010011 Y
+0g
+b100 #
+b100 L
+b100 b
 b1000 F
-b1000 \
-b1100 @
-b1100 b
-b1000 A
-b1000 `
-b1000 c
-0a
-1,
-1N
-0'
-1$
-#90000
-0$
-#95000
-0]
-0.
-09
-0"
-b1000 )
-1(
-0,
-0N
-1a
-1$
-#100000
-0$
-#105000
-16
-10
-1_
-0(
+b1000 h
+b100 G
+b100 f
+b100 i
 1'
-1$
-#110000
-0$
-#115000
-1]
-1.
-06
-00
-0_
-19
-1"
+#60000
 0'
-1,
-1N
-0a
-b1100 #
+#65000
+0c
+04
+0"
+0?
+1g
+b101 &
+b101 0
+0/
+0T
+b100 ,
+1+
+1'
+#70000
+0'
+#75000
+1<
+16
+1e
+0+
+b11100000000000100010011 )
+b11100000000000100010011 5
+b11100000000000100010011 d
+1*
+1'
+#80000
+0'
+#85000
+b111 =
+b111 m
+b111 P
+b111 X
+1c
+14
+b111 R
+b111 U
+1"
+1?
+b10 >
+b10 l
+b10 E
+b10 ]
+b111 B
+b111 [
+b111 k
+b111 K
+b111 _
+b111 @
+b111 Z
+0<
+06
+0e
+b1000 #
+b1000 L
+b1000 b
 b1100 F
-b1100 \
-b10000 @
-b10000 b
-b1100 A
-b1100 `
-b1100 c
-1$
-#120000
-0$
-#125000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b1100 )
-1(
-1$
-#130000
-0$
-#135000
-16
-10
-1_
-0(
+b1100 h
+b1000 G
+b1000 f
+b1000 i
+0g
+1/
+1T
+b11100000000000100010011 S
+b11100000000000100010011 Y
+0*
 1'
-1$
-#140000
-0$
-#145000
-1]
-1.
-1"
-19
+#90000
+0'
+#95000
+0c
+04
+0?
+0"
+b1000 ,
+1+
+0/
+0T
+b111 %
+b111 1
+1g
+1'
+#100000
+0'
+#105000
+1<
+16
+1e
+0+
+b1000001000000110110011 )
+b1000001000000110110011 5
+b1000001000000110110011 d
+1*
+1'
+#110000
+0'
+#115000
+b1100 =
+b1100 m
+b1100 P
+b1100 X
+13
+17
+08
+b111 A
+b111 o
+b101 C
+b101 W
+b101 n
+b111 R
+b111 U
+1c
+14
+0<
 06
-00
-0_
-b10000 #
+0e
+1?
+0J
+1I
+b110011 H
+b110011 ^
+b11 >
+b11 l
+b11 E
+b11 ]
+b1 D
+b1 \
+b1 j
+b10 B
+b10 [
+b10 k
+b10 K
+b10 _
+b10 @
+b10 Z
+1"
+0*
+1/
+1T
+b1000001000000110110011 S
+b1000001000000110110011 Y
+0g
+b1100 #
+b1100 L
+b1100 b
 b10000 F
-b10000 \
-b10100 @
-b10100 b
-b10000 A
-b10000 `
-b10000 c
-0a
-1,
-1N
-0'
-1$
-#150000
-0$
-#155000
-0]
-0.
-09
-0"
-b10000 )
-1(
-0,
-0N
-1a
-1$
-#160000
-0$
-#165000
-16
-10
-1_
-0(
+b10000 h
+b1100 G
+b1100 f
+b1100 i
 1'
-1$
-#170000
-0$
-#175000
-1]
-1.
-06
-00
-0_
-19
-1"
+#120000
 0'
-1,
-1N
-0a
-b10100 #
+#125000
+0c
+04
+0"
+0?
+1g
+b1100 $
+b1100 2
+0/
+0T
+b1100 ,
+1+
+1'
+#130000
+0'
+#135000
+1<
+16
+1e
+0+
+b10011 )
+b10011 5
+b10011 d
+1*
+1'
+#140000
+0'
+#145000
+1O
+07
+b0 R
+b0 U
+b0 =
+b0 m
+b0 P
+b0 X
+1c
+14
+18
+b0 A
+b0 o
+b0 C
+b0 W
+b0 n
+1"
+1?
+1J
+0I
+b10011 H
+b10011 ^
+b0 >
+b0 l
+b0 E
+b0 ]
+b0 D
+b0 \
+b0 j
+b0 B
+b0 [
+b0 k
+b0 K
+b0 _
+b0 @
+b0 Z
+0<
+06
+0e
+b10000 #
+b10000 L
+b10000 b
 b10100 F
-b10100 \
-b11000 @
-b11000 b
-b10100 A
-b10100 `
-b10100 c
-1$
-#180000
-0$
-#185000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b10100 )
-1(
-1$
-#190000
-0$
-#195000
-16
-10
-1_
-0(
+b10100 h
+b10000 G
+b10000 f
+b10000 i
+0g
+1/
+1T
+b10011 S
+b10011 Y
+0*
 1'
-1$
-#200000
-0$
-#205000
-1]
-1.
-1"
-19
+#150000
+0'
+#155000
+0c
+04
+0?
+0"
+b10000 ,
+1+
+0/
+0T
+1g
+1'
+#160000
+0'
+#165000
+1<
+16
+1e
+0+
+1*
+1'
+#170000
+0'
+#175000
+1c
+14
+0<
 06
-00
-0_
-b11000 #
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b10100 #
+b10100 L
+b10100 b
 b11000 F
-b11000 \
-b11100 @
-b11100 b
-b11000 A
-b11000 `
-b11000 c
-0a
-1,
-1N
-0'
-1$
-#210000
-0$
-#215000
-0]
-0.
-09
-0"
-b11000 )
-1(
-0,
-0N
-1a
-1$
-#220000
-0$
-#225000
-16
-10
-1_
-0(
+b11000 h
+b10100 G
+b10100 f
+b10100 i
 1'
-1$
-#230000
-0$
-#235000
-1]
-1.
-06
-00
-0_
-19
-1"
+#180000
 0'
-1,
-1N
-0a
-b11100 #
+#185000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b10100 ,
+1+
+1'
+#190000
+0'
+#195000
+1<
+16
+1e
+0+
+1*
+1'
+#200000
+0'
+#205000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b11000 #
+b11000 L
+b11000 b
 b11100 F
-b11100 \
-b100000 @
-b100000 b
-b11100 A
-b11100 `
-b11100 c
-1$
-#240000
-0$
-#245000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b11100 )
-1(
-1$
-#250000
-0$
-#255000
-16
-10
-1_
-0(
+b11100 h
+b11000 G
+b11000 f
+b11000 i
+0g
+1/
+1T
+0*
 1'
-1$
-#260000
-0$
-#265000
-1]
-1.
-1"
-19
+#210000
+0'
+#215000
+0c
+04
+0?
+0"
+b11000 ,
+1+
+0/
+0T
+1g
+1'
+#220000
+0'
+#225000
+1<
+16
+1e
+0+
+1*
+1'
+#230000
+0'
+#235000
+1c
+14
+0<
 06
-00
-0_
-b100000 #
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b11100 #
+b11100 L
+b11100 b
 b100000 F
-b100000 \
-b100100 @
-b100100 b
-b100000 A
-b100000 `
-b100000 c
-0a
-1,
-1N
-0'
-1$
-#270000
-0$
-#275000
-0]
-0.
-09
-0"
-b100000 )
-1(
-0,
-0N
-1a
-1$
-#280000
-0$
-#285000
-16
-10
-1_
-0(
+b100000 h
+b11100 G
+b11100 f
+b11100 i
 1'
-1$
-#290000
-0$
-#295000
-1]
-1.
-06
-00
-0_
-19
-1"
+#240000
 0'
-1,
-1N
-0a
-b100100 #
+#245000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b11100 ,
+1+
+1'
+#250000
+0'
+#255000
+1<
+16
+1e
+0+
+1*
+1'
+#260000
+0'
+#265000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b100000 #
+b100000 L
+b100000 b
 b100100 F
-b100100 \
-b101000 @
-b101000 b
-b100100 A
-b100100 `
-b100100 c
-1$
-#300000
-0$
-#305000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b100100 )
-1(
-1$
-#310000
-0$
-#315000
-16
-10
-1_
-0(
+b100100 h
+b100000 G
+b100000 f
+b100000 i
+0g
+1/
+1T
+0*
 1'
-1$
-#320000
-0$
-#325000
-1]
-1.
-1"
-19
+#270000
+0'
+#275000
+0c
+04
+0?
+0"
+b100000 ,
+1+
+0/
+0T
+1g
+1'
+#280000
+0'
+#285000
+1<
+16
+1e
+0+
+1*
+1'
+#290000
+0'
+#295000
+1c
+14
+0<
 06
-00
-0_
-b101000 #
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b100100 #
+b100100 L
+b100100 b
 b101000 F
-b101000 \
-b101100 @
-b101100 b
-b101000 A
-b101000 `
-b101000 c
-0a
-1,
-1N
-0'
-1$
-#330000
-0$
-#335000
-0]
-0.
-09
-0"
-b101000 )
-1(
-0,
-0N
-1a
-1$
-#340000
-0$
-#345000
-16
-10
-1_
-0(
+b101000 h
+b100100 G
+b100100 f
+b100100 i
 1'
-1$
-#350000
-0$
-#355000
-1]
-1.
-06
-00
-0_
-19
-1"
+#300000
 0'
-1,
-1N
-0a
-b101100 #
+#305000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b100100 ,
+1+
+1'
+#310000
+0'
+#315000
+1<
+16
+1e
+0+
+1*
+1'
+#320000
+0'
+#325000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b101000 #
+b101000 L
+b101000 b
 b101100 F
-b101100 \
-b110000 @
-b110000 b
-b101100 A
-b101100 `
-b101100 c
-1$
-#360000
-0$
-#365000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b101100 )
-1(
-1$
-#370000
-0$
-#375000
-16
-10
-1_
-0(
+b101100 h
+b101000 G
+b101000 f
+b101000 i
+0g
+1/
+1T
+0*
 1'
-1$
-#380000
-0$
-#385000
-1]
-1.
-1"
-19
+#330000
+0'
+#335000
+0c
+04
+0?
+0"
+b101000 ,
+1+
+0/
+0T
+1g
+1'
+#340000
+0'
+#345000
+1<
+16
+1e
+0+
+1*
+1'
+#350000
+0'
+#355000
+1c
+14
+0<
 06
-00
-0_
-b110000 #
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b101100 #
+b101100 L
+b101100 b
 b110000 F
-b110000 \
-b110100 @
-b110100 b
-b110000 A
-b110000 `
-b110000 c
-0a
-1,
-1N
-0'
-1$
-#390000
-0$
-#395000
-0]
-0.
-09
-0"
-b110000 )
-1(
-0,
-0N
-1a
-1$
-#400000
-0$
-#405000
-16
-10
-1_
-0(
+b110000 h
+b101100 G
+b101100 f
+b101100 i
 1'
-1$
-#410000
-0$
-#415000
-1]
-1.
-06
-00
-0_
-19
-1"
+#360000
 0'
-1,
-1N
-0a
-b110100 #
+#365000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b101100 ,
+1+
+1'
+#370000
+0'
+#375000
+1<
+16
+1e
+0+
+1*
+1'
+#380000
+0'
+#385000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b110000 #
+b110000 L
+b110000 b
 b110100 F
-b110100 \
-b111000 @
-b111000 b
-b110100 A
-b110100 `
-b110100 c
-1$
-#420000
-0$
-#425000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b110100 )
-1(
-1$
-#430000
-0$
-#435000
-16
-10
-1_
-0(
+b110100 h
+b110000 G
+b110000 f
+b110000 i
+0g
+1/
+1T
+0*
 1'
-1$
-#440000
-0$
-#445000
-1]
-1.
-1"
-19
+#390000
+0'
+#395000
+0c
+04
+0?
+0"
+b110000 ,
+1+
+0/
+0T
+1g
+1'
+#400000
+0'
+#405000
+1<
+16
+1e
+0+
+1*
+1'
+#410000
+0'
+#415000
+1c
+14
+0<
 06
-00
-0_
-b111000 #
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b110100 #
+b110100 L
+b110100 b
 b111000 F
-b111000 \
-b111100 @
-b111100 b
-b111000 A
-b111000 `
-b111000 c
-0a
-1,
-1N
-0'
-1$
-#450000
-0$
-#455000
-0]
-0.
-09
-0"
-b111000 )
-1(
-0,
-0N
-1a
-1$
-#460000
-0$
-#465000
-16
-10
-1_
-0(
+b111000 h
+b110100 G
+b110100 f
+b110100 i
 1'
-1$
-#470000
-0$
-#475000
-1]
-1.
-06
-00
-0_
-19
-1"
+#420000
 0'
-1,
-1N
-0a
-b111100 #
+#425000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b110100 ,
+1+
+1'
+#430000
+0'
+#435000
+1<
+16
+1e
+0+
+1*
+1'
+#440000
+0'
+#445000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b111000 #
+b111000 L
+b111000 b
 b111100 F
-b111100 \
-b1000000 @
-b1000000 b
-b111100 A
-b111100 `
-b111100 c
-1$
-#480000
-0$
-#485000
-0]
-0.
-0"
-09
-1a
-0,
-0N
-b111100 )
-1(
-1$
-#490000
-0$
-#495000
-16
-10
-1_
-0(
+b111100 h
+b111000 G
+b111000 f
+b111000 i
+0g
+1/
+1T
+0*
 1'
-1$
-#500000
-0$
-#505000
-1]
-1.
-1"
-19
-06
-00
-0_
-b1000000 #
-b1000000 F
-b1000000 \
-b1000100 @
-b1000100 b
-b1000000 A
-b1000000 `
-b1000000 c
-0a
-1,
-1N
+#450000
 0'
-1$
-#510000
-0$
-#515000
-0]
-0.
-09
+#455000
+0c
+04
+0?
 0"
-b1000000 )
-1(
-0,
-0N
-1a
-1$
-#520000
-0$
-#525000
-16
-10
-1_
-0(
+b111000 ,
+1+
+0/
+0T
+1g
 1'
-1$
+#460000
+0'
+#465000
+1<
+16
+1e
+0+
+1*
+1'
+#470000
+0'
+#475000
+1c
+14
+0<
+06
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b111100 #
+b111100 L
+b111100 b
+b1000000 F
+b1000000 h
+b111100 G
+b111100 f
+b111100 i
+1'
+#480000
+0'
+#485000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b111100 ,
+1+
+1'
+#490000
+0'
+#495000
+1<
+16
+1e
+0+
+1*
+1'
+#500000
+0'
+#505000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b1000000 #
+b1000000 L
+b1000000 b
+b1000100 F
+b1000100 h
+b1000000 G
+b1000000 f
+b1000000 i
+0g
+1/
+1T
+0*
+1'
+#510000
+0'
+#515000
+0c
+04
+0?
+0"
+b1000000 ,
+1+
+0/
+0T
+1g
+1'
+#520000
+0'
+#525000
+1<
+16
+1e
+0+
+1*
+1'
 #530000
-0$
-#531000
+0'
+#535000
+1c
+14
+0<
+06
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b1000100 #
+b1000100 L
+b1000100 b
+b1001000 F
+b1001000 h
+b1000100 G
+b1000100 f
+b1000100 i
+1'
+#540000
+0'
+#545000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b1000100 ,
+1+
+1'
+#550000
+0'
+#555000
+1<
+16
+1e
+0+
+1*
+1'
+#560000
+0'
+#565000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b1001000 #
+b1001000 L
+b1001000 b
+b1001100 F
+b1001100 h
+b1001000 G
+b1001000 f
+b1001000 i
+0g
+1/
+1T
+0*
+1'
+#570000
+0'
+#575000
+0c
+04
+0?
+0"
+b1001000 ,
+1+
+0/
+0T
+1g
+1'
+#580000
+0'
+#585000
+1<
+16
+1e
+0+
+1*
+1'
+#590000
+0'
+#595000
+1c
+14
+0<
+06
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b1001100 #
+b1001100 L
+b1001100 b
+b1010000 F
+b1010000 h
+b1001100 G
+b1001100 f
+b1001100 i
+1'
+#600000
+0'
+#605000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b1001100 ,
+1+
+1'
+#610000
+0'
+#615000
+1<
+16
+1e
+0+
+1*
+1'
+#620000
+0'
+#625000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b1010000 #
+b1010000 L
+b1010000 b
+b1010100 F
+b1010100 h
+b1010000 G
+b1010000 f
+b1010000 i
+0g
+1/
+1T
+0*
+1'
+#630000
+0'
+#635000
+0c
+04
+0?
+0"
+b1010000 ,
+1+
+0/
+0T
+1g
+1'
+#640000
+0'
+#645000
+1<
+16
+1e
+0+
+1*
+1'
+#650000
+0'
+#655000
+1c
+14
+0<
+06
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b1010100 #
+b1010100 L
+b1010100 b
+b1011000 F
+b1011000 h
+b1010100 G
+b1010100 f
+b1010100 i
+1'
+#660000
+0'
+#665000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b1010100 ,
+1+
+1'
+#670000
+0'
+#675000
+1<
+16
+1e
+0+
+1*
+1'
+#680000
+0'
+#685000
+1c
+14
+1"
+1?
+0<
+06
+0e
+b1011000 #
+b1011000 L
+b1011000 b
+b1011100 F
+b1011100 h
+b1011000 G
+b1011000 f
+b1011000 i
+0g
+1/
+1T
+0*
+1'
+#690000
+0'
+#695000
+0c
+04
+0?
+0"
+b1011000 ,
+1+
+0/
+0T
+1g
+1'
+#700000
+0'
+#705000
+1<
+16
+1e
+0+
+1*
+1'
+#710000
+0'
+#715000
+1c
+14
+0<
+06
+0e
+1?
+1"
+0*
+1/
+1T
+0g
+b1011100 #
+b1011100 L
+b1011100 b
+b1100000 F
+b1100000 h
+b1011100 G
+b1011100 f
+b1011100 i
+1'
+#720000
+0'
+#725000
+0c
+04
+0"
+0?
+1g
+0/
+0T
+b1011100 ,
+1+
+1'
+#730000
+0'
+#731000

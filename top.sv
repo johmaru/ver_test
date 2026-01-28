@@ -1,0 +1,174 @@
+module regfile32 (
+    input logic clk,
+    input logic we,
+    input logic [4:0] waddr,
+    input logic [31:0] wdata,
+    input logic [4:0] raddr1,
+    output logic [31:0] rdata1,
+    input logic [4:0] raddr2,
+    output logic [31:0] rdata2
+);
+
+    logic [31:0] regs [0:31];
+
+    always_comb begin
+        rdata1 = (raddr1 != 5'd0) ? regs[raddr1] : 32'd0;
+        rdata2 = (raddr2 != 5'd0) ? regs[raddr2] : 32'd0;
+    end
+
+    always_ff @(posedge clk) begin
+        if (we && (waddr != 5'd0)) begin
+            regs[waddr] <= wdata;
+        end
+    end
+endmodule
+
+module cpu_top (
+    input clk,
+    input reset_n,
+    
+    input logic imem_req_ready,
+    input logic imem_resp_valid,
+    input logic [31:0] imem_resp_data,
+    output wire imem_req_valid,
+    output wire [31:0] imem_req_addr,
+    output wire imem_resp_ready,
+    output logic [31:0] dbg_x1,
+    output logic [31:0] dbg_x2,
+    output logic [31:0] dbg_x3
+);
+    
+
+logic [31:0] pc_current;
+logic [31:0] pc_next;
+logic pc_en;
+
+pc_reg u_pc (
+    .clk(clk),
+    .reset_n(reset_n),
+    .pc_en(pc_en),
+    .pc_next(pc_next),
+    .pc_current(pc_current)
+);
+
+fetch_stage u_fetch (
+    .clk(clk),
+    .reset_n(reset_n),
+    .imem_req_ready(imem_req_ready),
+    .imem_resp_valid(imem_resp_valid),
+    .imem_resp_data(imem_resp_data),
+    .pc_current(pc_current),
+    .imem_req_valid(imem_req_valid),
+    .imem_req_addr(imem_req_addr),
+    .imem_resp_ready(imem_resp_ready)
+);
+
+logic imem_req_fire;
+logic imem_resp_fire;   
+assign imem_req_fire = imem_req_valid && imem_req_ready;
+assign imem_resp_fire = imem_resp_valid && imem_resp_ready;
+
+assign pc_next = pc_current + 32'd4;
+assign pc_en = imem_resp_fire;
+
+logic if_id_valid;
+logic [31:0] if_id_inst;
+
+logic consume;
+assign consume = if_id_valid;
+
+always_ff @(posedge clk) begin
+    if (!reset_n) begin
+        if_id_valid <= 1'b0;
+        if_id_inst <= 32'b0;
+    end else begin
+        if (imem_resp_fire && (!if_id_valid || consume)) begin
+            if_id_inst <= imem_resp_data;
+        end
+        if_id_valid <= (if_id_valid && !consume) ? 1'b1
+                    : (imem_resp_fire ? 1'b1 : 1'b0);
+    end
+end
+
+logic [6:0] opcode;
+logic [4:0] rd;
+logic [2:0] funct3;
+logic [4:0] rs1;
+logic [4:0] rs2;
+logic [6:0] funct7;
+logic [31:0] imm_i;
+logic [4:0] shamt;
+
+field_extractor u_dec (
+    .instruction(if_id_inst),
+    .opcode(opcode),
+    .rd(rd),
+    .funct3(funct3),
+    .rs1(rs1),
+    .rs2(rs2),
+    .funct7(funct7),
+    .imm_i(imm_i),
+    .shamt(shamt)
+);
+
+logic [31:0] rs1_data;
+logic [31:0] rs2_data;
+logic wb_we;
+logic [4:0] wb_rd;
+logic [31:0] wb_data;
+
+regfile32 u_rf (
+    .clk(clk),
+    .we(wb_we),
+    .waddr(wb_rd),
+    .wdata(wb_data),
+    .raddr1(rs1),
+    .rdata1(rs1_data),
+    .raddr2(rs2),
+    .rdata2(rs2_data)
+);
+
+assign dbg_x1 = u_rf.regs[1];
+assign dbg_x2 = u_rf.regs[2];
+assign dbg_x3 = u_rf.regs[3];
+
+logic is_rtype, is_itype;
+assign is_rtype = (opcode == 7'b0110011);
+assign is_itype = (opcode == 7'b0010011);
+
+logic op_add, op_sub, op_and, op_or, op_addi;
+assign op_add = is_rtype && (funct3 == 3'b000) && (funct7 == 7'b0000000);
+assign op_sub = is_rtype && (funct3 == 3'b000) && (funct7 == 7'b0100000);
+assign op_and = is_rtype && (funct3 == 3'b111) && (funct7 == 7'b0000000);
+assign op_or  = is_rtype && (funct3 == 3'b110) && (funct7 == 7'b0000000);
+assign op_addi = is_itype && (funct3 == 3'b000);
+
+logic [31:0] alu_in2;
+assign alu_in2 = op_addi ? imm_i : rs2_data;
+
+logic [3:0] alu_opcode;
+assign alu_opcode =
+    op_sub ? 4'b0001 :
+    op_and ? 4'b0010 :
+    op_or  ? 4'b0011 :
+             4'b0000;
+
+logic [31:0] alu_res;
+logic alu_zero;
+
+alu u_alu (
+    .a(rs1_data),
+    .b(alu_in2),
+    .opcode(alu_opcode),
+    .result(alu_res),
+    .zero(alu_zero)
+);
+
+logic dec_wb_we;
+assign dec_wb_we = op_add || op_sub || op_and || op_or || op_addi;
+
+assign wb_we = if_id_valid && dec_wb_we;
+assign wb_rd = rd;
+assign wb_data = alu_res;
+
+endmodule
