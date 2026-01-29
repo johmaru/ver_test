@@ -17,22 +17,28 @@ endmodule
 module fetch_stage(
   input  logic       clk,
   input  logic       reset_n,
+
+  input  logic       stall,
+
   input  logic       imem_req_ready,
   input  logic       imem_resp_valid,
   input  logic [31:0] imem_resp_data,
   input  logic [31:0] pc_current,
+  
   output logic       imem_req_valid,
   output logic [31:0] imem_req_addr,
   output logic       imem_resp_ready
 );
+
   logic  imem_outstanding;
 
-  assign imem_req_valid  = ~imem_outstanding;
+  assign imem_req_valid  = (~imem_outstanding) && (!stall);
   assign imem_req_addr   = pc_current;
-  assign imem_resp_ready = 1'b1;
+  assign imem_resp_ready = (!stall);
 
   logic imem_req_fire;
   assign imem_req_fire = imem_req_valid  & imem_req_ready;
+
   logic imem_resp_fire;
   assign imem_resp_fire = imem_resp_valid & imem_resp_ready;
 

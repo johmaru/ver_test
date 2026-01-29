@@ -1,3 +1,4 @@
+// definition of a simple 32-register file
 module regfile32 (
     input logic clk,
     input logic we,
@@ -23,6 +24,7 @@ module regfile32 (
     end
 endmodule
 
+// Top-level CPU module
 module cpu_top (
     input clk,
     input reset_n,
@@ -33,7 +35,7 @@ module cpu_top (
     output wire imem_req_valid,
     output wire [31:0] imem_req_addr,
     output wire imem_resp_ready,
-    output logic [31:0] dbg_x1,
+    output logic [31:0] dbg_x1, // Debug outputs for registers x1, x2, x3
     output logic [31:0] dbg_x2,
     output logic [31:0] dbg_x3
 );
@@ -43,6 +45,7 @@ logic [31:0] pc_current;
 logic [31:0] pc_next;
 logic pc_en;
 
+// Program Counter Register
 pc_reg u_pc (
     .clk(clk),
     .reset_n(reset_n),
@@ -51,17 +54,29 @@ pc_reg u_pc (
     .pc_current(pc_current)
 );
 
+logic need_stall;
+
+// Fetch Stage
+logic fetch_imem_req_valid;
+logic [31:0] fetch_imem_req_addr;
+logic fetch_imem_resp_ready;
+
 fetch_stage u_fetch (
     .clk(clk),
     .reset_n(reset_n),
+    .stall(need_stall),
     .imem_req_ready(imem_req_ready),
     .imem_resp_valid(imem_resp_valid),
     .imem_resp_data(imem_resp_data),
     .pc_current(pc_current),
-    .imem_req_valid(imem_req_valid),
-    .imem_req_addr(imem_req_addr),
-    .imem_resp_ready(imem_resp_ready)
+    .imem_req_valid(fetch_imem_req_valid),
+    .imem_req_addr(fetch_imem_req_addr),
+    .imem_resp_ready(fetch_imem_resp_ready)
 );
+
+assign imem_req_valid = fetch_imem_req_valid;
+assign imem_req_addr = fetch_imem_req_addr;
+assign imem_resp_ready = fetch_imem_resp_ready;
 
 logic imem_req_fire;
 logic imem_resp_fire;   
@@ -71,25 +86,31 @@ assign imem_resp_fire = imem_resp_valid && imem_resp_ready;
 assign pc_next = pc_current + 32'd4;
 assign pc_en = imem_resp_fire;
 
+// IF/ID Pipeline Register
+
 logic if_id_valid;
 logic [31:0] if_id_inst;
+logic [31:0] if_id_pc;
 
 logic consume;
-assign consume = if_id_valid;
+assign consume = if_id_valid && !need_stall;
 
 always_ff @(posedge clk) begin
     if (!reset_n) begin
         if_id_valid <= 1'b0;
         if_id_inst <= 32'b0;
+        if_id_pc <= 32'b0;
     end else begin
         if (imem_resp_fire && (!if_id_valid || consume)) begin
             if_id_inst <= imem_resp_data;
+            if_id_pc <= pc_current;
         end
         if_id_valid <= (if_id_valid && !consume) ? 1'b1
                     : (imem_resp_fire ? 1'b1 : 1'b0);
     end
 end
 
+// Compatible with RISC-V RV32I Instruction Set
 logic [6:0] opcode;
 logic [4:0] rd;
 logic [2:0] funct3;
@@ -99,6 +120,7 @@ logic [6:0] funct7;
 logic [31:0] imm_i;
 logic [4:0] shamt;
 
+// Decoder and Instruction Field Extractor
 field_extractor u_dec (
     .instruction(if_id_inst),
     .opcode(opcode),
@@ -117,6 +139,7 @@ logic wb_we;
 logic [4:0] wb_rd;
 logic [31:0] wb_data;
 
+// Register File
 regfile32 u_rf (
     .clk(clk),
     .we(wb_we),
@@ -143,8 +166,22 @@ assign op_and = is_rtype && (funct3 == 3'b111) && (funct7 == 7'b0000000);
 assign op_or  = is_rtype && (funct3 == 3'b110) && (funct7 == 7'b0000000);
 assign op_addi = is_itype && (funct3 == 3'b000);
 
-logic [31:0] alu_in2;
-assign alu_in2 = op_addi ? imm_i : rs2_data;
+logic use_rs1, use_rs2;
+assign use_rs1 = is_rtype || is_itype;
+assign use_rs2 = is_rtype;
+
+logic dep_rs1, dep_rs2;
+assign dep_rs1 = use_rs1 
+                 && id_ex_valid && id_ex_wb_we
+                 && (id_ex_rd != 5'b0)
+                 && (id_ex_rd == rs1);
+
+assign dep_rs2 = use_rs2
+                    && id_ex_valid && id_ex_wb_we
+                    && (id_ex_rd != 5'b0)
+                    && (id_ex_rd == rs2);
+
+assign need_stall = if_id_valid && (dep_rs1 || dep_rs2);
 
 logic [3:0] alu_opcode;
 assign alu_opcode =
@@ -153,22 +190,79 @@ assign alu_opcode =
     op_or  ? 4'b0011 :
              4'b0000;
 
+logic dec_wb_we;
+assign dec_wb_we = op_add || op_sub || op_and || op_or || op_addi;
+
+// ID/EX Pipeline Register
+
+logic id_ex_valid;
+logic [31:0] id_ex_rs1_data;
+logic [31:0] id_ex_rs2_data;
+logic [31:0] id_ex_imm_i;
+logic [4:0]  id_ex_rd;
+logic        id_ex_wb_we;
+logic [3:0]  id_ex_alu_opcode;
+logic        id_ex_use_imm;
+logic [31:0] id_ex_pc;
+
+logic forward_rs1, forward_rs2;
+assign forward_rs1 =
+       id_ex_valid && id_ex_wb_we && (id_ex_rd != 5'b0) && (id_ex_rd == rs1);
+
+assign forward_rs2 =
+       id_ex_valid && id_ex_wb_we && (id_ex_rd != 5'b0) && (id_ex_rd == rs2);
+
+logic [31:0] dec_rs1_val, dec_rs2_val;
+
+assign dec_rs1_val = forward_rs1 ? wb_data : rs1_data;
+assign dec_rs2_val = forward_rs2 ? wb_data : rs2_data;
+
+always_ff @(posedge clk) begin
+    if (!reset_n) begin
+        id_ex_valid <= 1'b0;
+        id_ex_rs1_data <= 32'b0;
+        id_ex_rs2_data <= 32'b0;
+        id_ex_imm_i <= 32'b0;
+        id_ex_rd <= 5'b0;
+        id_ex_wb_we <= 1'b0;
+        id_ex_alu_opcode <= 4'b0;
+        id_ex_use_imm <= 1'b0;
+        id_ex_pc <= 32'b0;
+    end else if (need_stall) begin
+        id_ex_valid <= 1'b0;
+        id_ex_wb_we <= 1'b0;
+        id_ex_rd <= 5'b0;
+    end else begin
+        id_ex_valid <= if_id_valid;
+        id_ex_rs1_data <= dec_rs1_val;
+        id_ex_rs2_data <= dec_rs2_val;
+        id_ex_imm_i <= imm_i;
+        id_ex_rd <= rd;
+        id_ex_wb_we <= dec_wb_we;
+        id_ex_alu_opcode <= alu_opcode;
+        id_ex_use_imm <= op_addi;
+        id_ex_pc <= if_id_pc;
+    end
+end
+
+// EX/WB Stage
+
+logic [31:0] ex_alu_in2;
+assign ex_alu_in2 = id_ex_use_imm ? id_ex_imm_i : id_ex_rs2_data;
+
 logic [31:0] alu_res;
 logic alu_zero;
 
 alu u_alu (
-    .a(rs1_data),
-    .b(alu_in2),
-    .opcode(alu_opcode),
+    .a(id_ex_rs1_data),
+    .b(ex_alu_in2),
+    .opcode(id_ex_alu_opcode),
     .result(alu_res),
     .zero(alu_zero)
 );
 
-logic dec_wb_we;
-assign dec_wb_we = op_add || op_sub || op_and || op_or || op_addi;
-
-assign wb_we = if_id_valid && dec_wb_we;
-assign wb_rd = rd;
+assign wb_we = id_ex_valid && id_ex_wb_we;
+assign wb_rd = id_ex_rd;
 assign wb_data = alu_res;
 
 endmodule

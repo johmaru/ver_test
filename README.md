@@ -9,7 +9,6 @@ Fetch/Decode・Execute/WBの3ステージ。
 1. エミュレータでの動作確認
 2. FPGA開発ボード実機での動作確認
 
-
 ## エミュレート
 
 ```bash
@@ -26,13 +25,14 @@ vvp .\sim.out
 ```
 
 GtkWave
+
 ```bash
 gtkwave .\cpu.vcd
 ```
 
 ## ロードマップ
 
-1. 3ステージ化する
+1. (Done)3ステージ化する
 2. RV32Iの命令を揃える(分岐、ジャンプ、即値生成、比較、ハザード)
 3. 例外追加(軽いやつ)
 4. Load/Store + バイトイネーブル + RAM + MMIOデコード
