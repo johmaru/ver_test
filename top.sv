@@ -159,11 +159,18 @@ logic is_rtype, is_itype;
 assign is_rtype = (opcode == 7'b0110011);
 assign is_itype = (opcode == 7'b0010011);
 
-logic op_add, op_sub, op_and, op_or, op_addi;
+logic op_add, op_sub, op_and, op_or, op_addi, op_xor, op_sll, op_srl, op_sra, op_slt, op_sltu;
 assign op_add = is_rtype && (funct3 == 3'b000) && (funct7 == 7'b0000000);
 assign op_sub = is_rtype && (funct3 == 3'b000) && (funct7 == 7'b0100000);
 assign op_and = is_rtype && (funct3 == 3'b111) && (funct7 == 7'b0000000);
 assign op_or  = is_rtype && (funct3 == 3'b110) && (funct7 == 7'b0000000);
+assign op_xor  = is_rtype && (funct3 == 3'b100) && (funct7 == 7'b0000000);
+assign op_sll  = is_rtype && (funct3 == 3'b001) && (funct7 == 7'b0000000);
+assign op_srl  = is_rtype && (funct3 == 3'b101) && (funct7 == 7'b0000000);
+assign op_sra  = is_rtype && (funct3 == 3'b101) && (funct7 == 7'b0100000);
+assign op_slt  = is_rtype && (funct3 == 3'b010) && (funct7 == 7'b0000000);
+assign op_sltu = is_rtype && (funct3 == 3'b011) && (funct7 == 7'b0000000);
+
 assign op_addi = is_itype && (funct3 == 3'b000);
 
 logic use_rs1, use_rs2;
@@ -188,10 +195,18 @@ assign alu_opcode =
     op_sub ? 4'b0001 :
     op_and ? 4'b0010 :
     op_or  ? 4'b0011 :
+    op_xor ? 4'b0100 :
+    op_sll ? 4'b0101 :
+    op_srl ? 4'b0110 :
+    op_sra ? 4'b0111 :
+    op_slt ? 4'b1000 :
+    op_sltu ? 4'b1001 :
              4'b0000;
 
 logic dec_wb_we;
-assign dec_wb_we = op_add || op_sub || op_and || op_or || op_addi;
+assign dec_wb_we = op_add || op_sub || op_and || op_or || op_addi
+                          || op_xor || op_sll || op_srl || op_sra
+                          || op_slt || op_sltu;
 
 // ID/EX Pipeline Register
 
