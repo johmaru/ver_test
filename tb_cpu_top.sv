@@ -91,6 +91,8 @@ module tb_cpu_top;
 
   imem_if imem();
 
+  always_comb imem.req_ready = 1'b1;
+
   logic [31:0] dbg_x1;
   logic [31:0] dbg_x2;
   logic [31:0] dbg_x3;

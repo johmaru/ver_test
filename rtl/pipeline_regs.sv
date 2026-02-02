@@ -85,8 +85,13 @@ module id_ex_reg (
     else if (stall)
     begin
       id_ex_valid <= 1'b0;
-      id_ex_wb_we <= 1'b0;
+      id_ex_rs1_data <= 32'b0;
+      id_ex_rs2_data <= 32'b0;
+      id_ex_imm_i <= 32'b0;
       id_ex_rd <= 5'b0;
+      id_ex_wb_we <= 1'b0;
+      id_ex_alu_opcode <= 4'b0;
+      id_ex_use_imm <= 1'b0;
     end
     else
     begin

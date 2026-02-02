@@ -9,6 +9,57 @@ Fetch/Decode・Execute/WBの3ステージ。
 1. エミュレータでの動作確認
 2. FPGA開発ボード実機での動作確認
 
+## [最新] verilator
+
+MSYS2-Mingw-64
+
+```bash
+pacman -Syu
+pacman -S --needed mingw-w64-x86_64-verilator mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+verilator --version
+```
+
+```bash
+cd /c/Users/YourName/ver_test
+```
+
+```bash
+verilator -Wall --sv --timing --trace --binary \
+  --top-module tb_cpu_top \
+  top.sv \
+  rtl/alu.sv \
+  rtl/stages/fetch.sv \
+  rtl/stages/dec.sv \
+  rtl/stages/execute.sv \
+  rtl/pipeline_regs.sv \
+  rtl/hazard.sv \
+  rtl/regfile.sv \
+  rtl/imem.sv \
+  tb_cpu_top.sv
+
+```
+
+警告多すぎてFetalの場合
+
+```bash
+verilator -Wall -Wno-fatal --sv --timing --trace --binary \
+  --top-module tb_cpu_top \
+  top.sv \
+  rtl/alu.sv \
+  rtl/stages/fetch.sv \
+  rtl/stages/dec.sv \
+  rtl/stages/execute.sv \
+  rtl/pipeline_regs.sv \
+  rtl/hazard.sv \
+  rtl/regfile.sv \
+  rtl/imem.sv \
+  tb_cpu_top.sv
+```
+
+```bash
+./obj_dir/Vtb_cpu_top
+```
+
 ## エミュレート
 
 ```bash

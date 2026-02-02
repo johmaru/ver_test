@@ -5,7 +5,7 @@ module cpu_top (
 
     imem_if.master imem,
 
-    output logic [31:0] dbg_x1, // Debug outputs for registers x1, x2, x3
+    output logic [31:0] dbg_x1,
     output logic [31:0] dbg_x2,
     output logic [31:0] dbg_x3
   );
@@ -139,13 +139,15 @@ module cpu_top (
                 .id_ex_valid(id_ex_valid),
                 .id_ex_wb_we(id_ex_wb_we),
                 .id_ex_rd(id_ex_rd),
+                .wb_we(wb_we),
+                .wb_rd(wb_rd),
                 .stall(stall),
                 .forward_rs1(forward_rs1),
                 .forward_rs2(forward_rs2)
               );
-  // logic [31:0] dec_rs1_val, dec_rs2_val;
-  // assign dec_rs1_val = forward_rs1 ? wb_data : rs1_data;
-  // assign dec_rs2_val = forward_rs2 ? wb_data : rs2_data;
+  logic [31:0] dec_rs1_val, dec_rs2_val;
+  assign dec_rs1_val = forward_rs1 ? wb_data : rs1_data;
+  assign dec_rs2_val = forward_rs2 ? wb_data : rs2_data;
 
   logic [31:0] id_ex_rs1_data;
   logic [31:0] id_ex_rs2_data;
@@ -162,8 +164,8 @@ module cpu_top (
               .if_id_valid(if_id_valid),
               .if_id_inst(if_id_inst),
               .if_id_pc(if_id_pc),
-              .rs1_data(rs1_data),
-              .rs2_data(rs2_data),
+              .rs1_data(dec_rs1_val),
+              .rs2_data(dec_rs2_val),
               .imm_i(imm_i),
               .rd(rd),
               .wb_we(dec_wb_we),
