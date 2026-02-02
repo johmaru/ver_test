@@ -17,7 +17,12 @@ iverilog -g2012 -o sim.out `
   .\rtl\alu.sv `
   .\rtl\stages\fetch.sv `
   .\rtl\stages\dec.sv `
-  .\tb_cpu_top.sv
+  .\tb_cpu_top.sv `
+  .\rtl\regfile.sv,
+  .\rtl\hazard.sv,
+  .\rtl\stages\execute.sv,
+  .\rtl\pipeline_regs.sv,
+  .\rtl\imem.sv
 ```
 
 ```bash

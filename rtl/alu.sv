@@ -4,23 +4,38 @@ module alu (
     input [3:0] opcode,
     output logic [31:0] result,
     output logic zero
-);
+  );
 
-always_comb begin
+  logic [4:0] shamt;
+  assign shamt = b[4:0];
+
+  always_comb
+  begin
     case (opcode)
-    4'b0000: result = a + b;          // ADD
-    4'b0001: result = a - b;          // SUB
-    4'b0010: result = a & b;          // AND
-    4'b0011: result = a | b;          // OR
-    4'b0100: result = a ^ b;          // XOR
-    4'b0101: result = a << b[4:0];   // SLL
-    4'b0110: result = a >> b[4:0];   // SRL
-    4'b0111: result = $signed(a) >>> b[4:0]; // SRA
-    4'b1000: result = ($signed(a) < $signed(b)) ? 32'b1 : 32'b0; // SLT
-    4'b1001: result = ($unsigned(a) < $unsigned(b)) ? 32'b1 : 32'b0; // SLTU
-    default: result = 32'b0;          // NOP
+      4'b0000:
+        result = a + b;          // ADD
+      4'b0001:
+        result = a - b;          // SUB
+      4'b0010:
+        result = a & b;          // AND
+      4'b0011:
+        result = a | b;          // OR
+      4'b0100:
+        result = a ^ b;          // XOR
+      4'b0101:
+        result = a << shamt;   // SLL
+      4'b0110:
+        result = a >> shamt;   // SRL
+      4'b0111:
+        result = $signed(a) >>> shamt; // SRA
+      4'b1000:
+        result = ($signed(a) < $signed(b)) ? 32'b1 : 32'b0; // SLT
+      4'b1001:
+        result = ($unsigned(a) < $unsigned(b)) ? 32'b1 : 32'b0; // SLTU
+      default:
+        result = 32'b0;          // NOP
     endcase
-end
+  end
 
-assign zero = (result == 32'b0);
+  assign zero = (result == 32'b0);
 endmodule
