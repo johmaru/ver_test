@@ -39,6 +39,10 @@ verilator -Wall --sv --timing --trace --binary \
 
 ```
 
+```bash
+./obj_dir/Vtb_cpu_top
+```
+
 警告多すぎてFetalの場合
 
 ```bash

@@ -44,62 +44,67 @@ module decode_ctrl (
     use_rs1 = 1'b0;
     use_rs2 = 1'b0;
 
-    case (opcode)
-      7'b0110011:
-      begin // R-type
-        use_rs1 = 1'b1;
-        use_rs2 = 1'b1;
-        wb_we = 1'b1;
-        case ({funct7, funct3})
-          10'b0000000_000:
-            alu_opcode = 4'b0000; // ADD
-          10'b0100000_000:
-            alu_opcode = 4'b0001; // SUB
-          10'b0000000_111:
-            alu_opcode = 4'b0010; // AND
-          10'b0000000_110:
-            alu_opcode = 4'b0011; // OR
-          10'b0000000_100:
-            alu_opcode = 4'b0100; // XOR
-          10'b0000000_001:
-            alu_opcode = 4'b0101; // SLL
-          10'b0000000_101:
-            alu_opcode = 4'b0110; // SRL
-          10'b0100000_101:
-            alu_opcode = 4'b0111; // SRA
-          10'b0000000_010:
-            alu_opcode = 4'b1000; // SLT
-          10'b0000000_011:
-            alu_opcode = 4'b1001; // SLTU
-          default:
-          begin
-            alu_opcode = 4'b0000; // Default to ADD
-            wb_we = 1'b0;
-          end
-        endcase
-      end
+    unique case (opcode)
+             7'b0110011:
+             begin // R-type
+               use_rs1 = 1'b1;
+               use_rs2 = 1'b1;
+               wb_we = 1'b1;
+               case ({funct7, funct3})
+                 10'b0000000_000:
+                   alu_opcode = 4'b0000; // ADD
+                 10'b0100000_000:
+                   alu_opcode = 4'b0001; // SUB
+                 10'b0000000_111:
+                   alu_opcode = 4'b0010; // AND
+                 10'b0000000_110:
+                   alu_opcode = 4'b0011; // OR
+                 10'b0000000_100:
+                   alu_opcode = 4'b0100; // XOR
+                 10'b0000000_001:
+                   alu_opcode = 4'b0101; // SLL
+                 10'b0000000_101:
+                   alu_opcode = 4'b0110; // SRL
+                 10'b0100000_101:
+                   alu_opcode = 4'b0111; // SRA
+                 10'b0000000_010:
+                   alu_opcode = 4'b1000; // SLT
+                 10'b0000000_011:
+                   alu_opcode = 4'b1001; // SLTU
+                 default:
+                 begin
+                   alu_opcode = 4'b0000; // Default to ADD
+                   wb_we = 1'b0;
+                 end
+               endcase
+             end
 
-      7'b0010011:
-      begin
-        use_rs1 = 1'b1;
-        use_rs2 = 1'b0;
-        use_imm = 1'b1;
+             7'b0010011:
+             begin
+               use_rs1 = 1'b1;
+               use_rs2 = 1'b0;
+               use_imm = 1'b1;
 
-        case (funct3)
-          3'b000:
-          begin
-            alu_opcode = 4'b0000; // ADDI
-            wb_we = 1'b1;
-          end
-        endcase
-      end
+               unique case (funct3)
+                 3'b000:
+                 begin
+                   alu_opcode = 4'b0000; // ADDI
+                   wb_we = 1'b1;
+                 end
+                 default:
+                 begin
+                   alu_opcode = 4'b0000; // Default to ADDI
+                   wb_we = 1'b0;
+                 end
+               endcase
+             end
 
-      default:
-      begin
-        wb_we = 1'b0;
-      end
-    endcase
-  end
+             default:
+             begin
+               wb_we = 1'b0;
+             end
+           endcase
+         end
 
 
-endmodule
+       endmodule

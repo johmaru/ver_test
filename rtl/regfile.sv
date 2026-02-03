@@ -8,18 +8,21 @@ module regfile32 (
     output logic [31:0] rdata1,
     input logic [4:0] raddr2,
     output logic [31:0] rdata2
-);
+  );
 
-    logic [31:0] regs [0:31];
+  logic [31:0] regs [0:31];
 
-    always_comb begin
-        rdata1 = (raddr1 != 5'd0) ? regs[raddr1] : 32'd0;
-        rdata2 = (raddr2 != 5'd0) ? regs[raddr2] : 32'd0;
+  always_comb
+  begin
+    rdata1 = (raddr1 != 5'd0) ? regs[raddr1] : 32'd0;
+    rdata2 = (raddr2 != 5'd0) ? regs[raddr2] : 32'd0;
+  end
+
+  always_ff @(posedge clk)
+  begin
+    if (we && (waddr != 5'd0))
+    begin
+      regs[waddr] <= wdata;
     end
-
-    always_ff @(posedge clk) begin
-        if (we && (waddr != 5'd0)) begin
-            regs[waddr] <= wdata;
-        end
-    end
+  end
 endmodule
