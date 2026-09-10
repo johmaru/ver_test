@@ -24,11 +24,9 @@ module fetch_stage(
 
     input  logic [31:0] pc_current
   );
-
-  always_comb
-  begin
+  
     assign imem.req_valid  = !stall;
     assign imem.req_addr   = pc_current;
-    assign imem.resp_ready = (!stall);
-  end
+    assign imem.resp_ready = !stall;
+    
 endmodule
