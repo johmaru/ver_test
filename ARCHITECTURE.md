@@ -103,41 +103,61 @@ flowchart LR
 
 ## 3. Fetch / PC / Instruction Memory
 
+Fetch周辺はrequest、response、PC更新が相互に接続されるため、1枚の図には詰め込まず3つの経路に分ける。
+
+### 3.1 Instruction request path
+
 ```mermaid
 flowchart LR
-    PC["pc_current"]
-    STALL["stall"]
+    PC["pc_current"] --> ADDR["req_addr<br/>= pc_current"] --> IMEM[(Instruction Memory)]
 
-    REQ_VALID["req_valid = !stall"]
-    REQ_ADDR["req_addr = pc_current"]
-    RESP_READY["resp_ready = !stall"]
+    STALL["stall"] --> NOTSTALL["!stall"] --> VALID["req_valid"] --> IMEM
 
-    IMEM[(Instruction Memory)]
-
-    FIRE["imem_resp_fire<br/>= resp_valid && resp_ready"]
-    PC_NEXT["pc_next<br/>= pc_current + 4"]
-    PC_EN["pc_en<br/>= imem_resp_fire"]
-    IFID["IF/ID Register"]
-
-    STALL --> REQ_VALID
-    STALL --> RESP_READY
-    PC --> REQ_ADDR
-
-    REQ_VALID --> IMEM
-    REQ_ADDR --> IMEM
-    IMEM -->|resp_valid| FIRE
-    RESP_READY --> FIRE
-    RESP_READY --> IMEM
-
-    IMEM -->|resp_data| IFID
-    FIRE --> IFID
-    PC --> IFID
-
-    PC --> PC_NEXT
-    FIRE --> PC_EN
-    PC_NEXT --> PC
-    PC_EN --> PC
+    IMEM -.-> READY["req_ready<br/>currently unused by CPU control"]
 ```
+
+現在、CPUは `stall = 0` の間 `req_valid = 1` とし、`pc_current` を要求アドレスとして出力する。
+
+`req_ready` はinterfaceには存在するが、現在のCPU制御では使用していない。
+
+### 3.2 Instruction response path
+
+```mermaid
+flowchart LR
+    IMEM[(Instruction Memory)]
+    STALL["stall"] --> READY["resp_ready<br/>= !stall"]
+
+    IMEM -->|resp_valid| FIRE["imem_resp_fire<br/>resp_valid && resp_ready"]
+    READY --> FIRE
+
+    IMEM -->|resp_data| IFID["IF/ID Register"]
+    FIRE -->|capture enable| IFID
+    PC["pc_current"] -->|if_id_pc| IFID
+```
+
+`resp_ready` はCPUからInstruction Memoryへ出力される信号で、現在は `!stall`。
+
+responseを実際に受理したことを表す条件は次の通り。
+
+```text
+imem_resp_fire = resp_valid && resp_ready
+```
+
+`imem_resp_fire = 1` のとき、`resp_data` とその時点の `pc_current` をIF/IDへ取り込む。
+
+### 3.3 PC update path
+
+```mermaid
+flowchart LR
+    RESET["reset_n = 0"] -->|pc_current = 0| PCREG["PC Register"]
+
+    CURRENT["pc_current"] --> ADD4["+ 4"] --> NEXT["pc_next"] --> PCREG
+    FIRE["imem_resp_fire"] --> EN["pc_en"] --> PCREG
+
+    PCREG -->|next posedge| NEWPC["new pc_current"]
+```
+
+PC Registerは `pc_next` が存在するだけでは更新されない。`pc_en = 1` のクロック立ち上がりでだけ更新する。
 
 ### PC更新条件
 
@@ -165,33 +185,41 @@ pc_en   = imem_resp_fire
 | `resp_data` | input | IF/IDへ格納 |
 | `resp_ready` | output | `!stall` |
 
-`imem_resp_fire`:
-
-```text
-imem_resp_fire = resp_valid && resp_ready
-```
-
 ---
 
 ## 4. IF/ID Register
 
-```mermaid
-stateDiagram-v2
-    [*] --> Empty: reset
-
-    Empty --> Valid: imem_resp_fire
-    Empty --> Empty: no response
-
-    Valid --> Valid: stall
-    Valid --> Valid: consume + imem_resp_fire
-    Valid --> Empty: consume + no response
-```
+IF/IDは状態遷移図として考えるより、`always_ff` 内の**更新優先順位**として読む方が現在のRTLに近い。
 
 内部条件:
 
 ```text
 consume = if_id_valid && !stall
 ```
+
+```mermaid
+flowchart TD
+    CLK["posedge clk"] --> RESET{"!reset_n ?"}
+
+    RESET -->|yes| CLEAR["Clear IF/ID<br/>valid = 0<br/>inst = 0<br/>pc = 0"]
+    RESET -->|no| ACCEPT{"imem_resp_fire &&<br/>(!if_id_valid || consume) ?"}
+
+    ACCEPT -->|yes| CAPTURE["Capture new response<br/>if_id_valid = 1<br/>if_id_inst = resp_data<br/>if_id_pc = pc_current"]
+    ACCEPT -->|no| CONSUME{"consume ?"}
+
+    CONSUME -->|yes| EMPTY["if_id_valid = 0"]
+    CONSUME -->|no| HOLD["Hold current IF/ID contents"]
+```
+
+### IF/ID action summary
+
+| Condition | Action |
+|---|---|
+| `!reset_n` | `valid / inst / pc` を0へclear |
+| `stall = 1` | 既存のIF/ID内容をhold |
+| response受理可能かつ `imem_resp_fire = 1` | 新しい `resp_data` と `pc_current` をcapture |
+| `consume = 1` かつ新responseなし | `if_id_valid = 0` |
+| 上記のどれにも該当しない | 現在値をhold |
 
 更新規則:
 
@@ -210,7 +238,7 @@ else if consume:
     if_id_valid = 0
 ```
 
-`stall = 1` の間は既存のIF/ID内容を保持する。
+重要なのは、`stall = 1` では `consume = 0` になるため、既存のIF/ID内容を保持すること。
 
 ---
 
